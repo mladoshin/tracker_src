@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { PackageService } from './package.service';
 import { CreatePackageDto } from './dto/create-package.dto';
@@ -36,8 +38,8 @@ export class PackageController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.packageService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.packageService.findOne(id);
   }
 
   @Patch(':id')
@@ -46,6 +48,7 @@ export class PackageController {
     const parcel_data: Exclude<UpdatePackageDto, 'route'> = {
       ...updatePackageDto,
     };
+    delete (parcel_data as any).routeId;
 
     delete parcel_data.route;
     console.log('update');

@@ -1,5 +1,5 @@
 version: '3.7'
-name: sellerator
+name: tracker_app
 services:
   frontend:
     container_name: frontend

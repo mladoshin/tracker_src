@@ -55,6 +55,12 @@ export class PackageService {
     updatePackageDto: Exclude<UpdatePackageDto, 'route'>,
     route_data: Route,
   ) {
+    delete (updatePackageDto as any).routeId;
+
+    route_data.steps.forEach((st) => {
+      delete st.routeId;
+    });
+    
     //delete all route steps
     const p1 = await this.prisma.package.update({
       where: { tracking_number: id },

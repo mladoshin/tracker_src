@@ -9,6 +9,7 @@ import { RootState } from '../redux/store';
 import { Admin } from '../../../backend/node_modules/@prisma/client';
 import { PackageType } from '../components/package/PackagesTable';
 import { logout } from '../redux/auth/slice';
+import { GetPackageDto } from '../../../backend/src/package/dto/get-package.dto';
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
 // export type RecordSiteBody = Pick<TSite, 'Favicon' | 'Title' | 'Domain'>;
@@ -24,14 +25,16 @@ type RefreshAccessResponse = {
   access_token: string;
 };
 
-type FetchAllPackagesResponse = {
+export type FetchAllPackage = {
   name: string;
   tracking_number: string;
   status: string;
   start_date: string;
-}[];
+};
 
-type FetchPackageResponse = PackageType[];
+export type FetchAllPackagesResponse = FetchAllPackage[];
+
+export type FetchPackageResponse = PackageType;
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_BACKEND_URL,
@@ -123,6 +126,16 @@ export const appApi = createApi({
         url: `package/${id}`,
       }),
     }),
+    updatePackage: builder.mutation<
+      FetchPackageResponse,
+      { id: string; data: Partial<Exclude<GetPackageDto, 'routeId'>> }
+    >({
+      query: ({ id, data }) => ({
+        url: `/package/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -135,4 +148,5 @@ export const {
   useLogoutMutation,
   useFetchAllPackagesQuery,
   useLazyFetchPackageQuery,
+  useUpdatePackageMutation,
 } = appApi;

@@ -2,7 +2,8 @@ import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import { BsSearch } from 'react-icons/bs';
 import PackagesTable from '../../components/package/PackagesTable';
-import { useFetchAllPackagesQuery } from '../../api/api_index';
+import { FetchAllPackagesResponse, useFetchAllPackagesQuery } from '../../api/api_index';
+import { GetPackageDto } from '../../../../backend/src/package/dto/get-package.dto';
 
 function ListPackagesView() {
   const { data: packages, refetch } = useFetchAllPackagesQuery();
@@ -32,7 +33,7 @@ function ListPackagesView() {
       </div>
 
       <div>
-        <PackagesTable packages={packages} />
+        <PackagesTable packages={packages as FetchAllPackagesResponse} />
       </div>
     </div>
   );

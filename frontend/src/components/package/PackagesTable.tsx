@@ -2,11 +2,12 @@ import { Table } from 'flowbite-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { GetPackageDto } from '../../../../backend/src/package/dto/get-package.dto';
+import { FetchAllPackage, FetchAllPackagesResponse } from '../../api/api_index';
 
 export type PackageType = GetPackageDto;
 
 interface ISalesTableProps {
-  packages: PackageType[];
+  packages: FetchAllPackagesResponse;
 }
 
 function PackagesTable({ packages }: ISalesTableProps) {
@@ -37,7 +38,7 @@ function PackagesTable({ packages }: ISalesTableProps) {
   );
 }
 
-function PackageRow({ p }: { p: PackageType }) {
+function PackageRow({ p }: { p: FetchAllPackage }) {
   return (
     <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">

@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -8,6 +9,7 @@ import {
   Min,
   IsArray,
   ArrayNotEmpty,
+  IsAlphanumeric,
 } from 'class-validator';
 export class CreatePackageDto {
   name: string;
@@ -22,7 +24,9 @@ export class CreatePackageDto {
   status: string;
   @IsDateString({}, { message: 'Некорректная дата доставки' })
   expected_delivery_date: Date;
+  @IsAlphanumeric()
   comment: string;
+  @IsAlphanumeric()
   shipment: string;
   @IsNotEmpty({ message: 'Имя адресата не может быть пустым' })
   receiver_name: string;
@@ -64,6 +68,9 @@ export class RouteStep {
   timeout: number;
   @IsDateString()
   createdAt?: Date;
+
+  @Exclude()
+  routeId?: string;
 }
 
 export class GetRouteStep {
@@ -78,4 +85,6 @@ export class GetRouteStep {
   timeout: number;
   @IsDateString()
   createdAt?: Date;
+  @Exclude()
+  routeId?: string;
 }
