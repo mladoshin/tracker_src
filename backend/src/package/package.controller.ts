@@ -28,6 +28,7 @@ export class PackageController {
     };
 
     delete parcel_data.route;
+    delete (parcel_data as any).tracking_number;
 
     return this.packageService.create(parcel_data, route_data);
   }

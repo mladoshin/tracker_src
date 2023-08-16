@@ -60,7 +60,7 @@ export class PackageService {
     route_data.steps.forEach((st) => {
       delete st.routeId;
     });
-    
+
     //delete all route steps
     const p1 = await this.prisma.package.update({
       where: { tracking_number: id },

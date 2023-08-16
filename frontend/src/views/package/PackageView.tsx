@@ -1,13 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
+  CreatePackageBody,
   FetchPackageResponse,
+  useCreatePackageMutation,
   useLazyFetchPackageQuery,
   useUpdatePackageMutation,
 } from '../../api/api_index';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { Button, Label, TextInput } from 'flowbite-react';
 import RouteForm from '../../components/package/RouteForm';
+import { GetPackageDto } from '../../../../backend/src/package/dto/get-package.dto';
+import { PackageType } from '../../components/package/PackagesTable';
+import moment from 'moment';
 
 const initValues = {
   carrier: '',
@@ -37,10 +42,13 @@ function PackageView() {
   const { packageId } = useParams();
   const [getPackage, { data }] = useLazyFetchPackageQuery();
   const [updatePackage, { isLoading }] = useUpdatePackageMutation();
+  const [createPackage, { isLoading: isCreateLoading }] =
+    useCreatePackageMutation();
+  const navigate = useNavigate();
 
   const formikRef = useRef(null);
   useEffect(() => {
-    if (packageId) {
+    if (packageId && packageId !== 'new') {
       fetch(packageId);
     }
   }, [packageId]);
@@ -50,6 +58,14 @@ function PackageView() {
       const res = await getPackage(packageId).unwrap();
       await (formikRef.current as any).setValues(res, false);
     } catch {}
+  }
+
+  async function handleCancel() {
+    if (packageId === 'new') {
+      await (formikRef.current as any).setValues(initValues, false);
+    } else {
+      await fetch(packageId as string);
+    }
   }
 
   return (
@@ -63,11 +79,25 @@ function PackageView() {
         innerRef={formikRef}
         initialValues={initValues}
         onSubmit={(
-          values: FetchPackageResponse,
-          { setSubmitting }: FormikHelpers<FetchPackageResponse>,
+          values: PackageType,
+          { setSubmitting }: FormikHelpers<PackageType>,
         ) => {
-          console.log(values);
-          updatePackage({ id: packageId as string, data: values });
+          const body: CreatePackageBody = {
+            ...values,
+            start_date: new Date(values.start_date).toISOString(),
+            expected_delivery_date: new Date(
+              values.expected_delivery_date,
+            ).toISOString(),
+          };
+
+          if (packageId === 'new') {
+            //create new package
+
+            createPackage(body)
+            navigate('/panel/packages')
+          } else {
+            updatePackage({ id: packageId as string, data: body });
+          }
         }}>
         {(props) => (
           <form onSubmit={props.handleSubmit}>
@@ -150,7 +180,9 @@ function PackageView() {
                 type="date"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
-                value={props.values.start_date}
+                value={moment(new Date(props.values.start_date)).format(
+                  'YYYY-MM-DD',
+                )}
                 name="start_date"
               />
 
@@ -189,7 +221,9 @@ function PackageView() {
                 type="date"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
-                value={props.values.expected_delivery_date}
+                value={moment(
+                  new Date(props.values.expected_delivery_date),
+                ).format('YYYY-MM-DD')}
                 name="expected_delivery_date"
               />
 
@@ -265,10 +299,7 @@ function PackageView() {
             />
 
             <div className="flex justify-end mt-8 gap-6">
-              <Button
-                size="lg"
-                color="light"
-                onClick={() => fetch(packageId as string)}>
+              <Button size="lg" color="light" onClick={handleCancel}>
                 Отменить
               </Button>
               <Button
@@ -276,7 +307,7 @@ function PackageView() {
                 size="lg"
                 className="px-20"
                 isProcessing={isLoading}>
-                Сохранить
+                {packageId === 'new' ? 'Создать' : 'Сохранить'}
               </Button>
             </div>
           </form>

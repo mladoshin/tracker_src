@@ -2,11 +2,20 @@ import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import { BsSearch } from 'react-icons/bs';
 import PackagesTable from '../../components/package/PackagesTable';
-import { FetchAllPackagesResponse, useFetchAllPackagesQuery } from '../../api/api_index';
+import {
+  FetchAllPackagesResponse,
+  useFetchAllPackagesQuery,
+} from '../../api/api_index';
 import { GetPackageDto } from '../../../../backend/src/package/dto/get-package.dto';
+import { useNavigate } from 'react-router-dom';
 
 function ListPackagesView() {
   const { data: packages, refetch } = useFetchAllPackagesQuery();
+  const navigate = useNavigate();
+
+  function handleAddNewParcel() {
+    navigate('/panel/packages/new');
+  }
 
   return (
     <div>
@@ -34,6 +43,10 @@ function ListPackagesView() {
 
       <div>
         <PackagesTable packages={packages as FetchAllPackagesResponse} />
+      </div>
+
+      <div className="mt-7">
+        <Button onClick={handleAddNewParcel}>Добавить посылку</Button>
       </div>
     </div>
   );

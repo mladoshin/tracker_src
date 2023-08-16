@@ -2,7 +2,7 @@ import { Avatar, Dropdown, Navbar } from 'flowbite-react';
 
 export default function TopNavbar() {
   return (
-    <Navbar fluid rounded className="shadow-md">
+    <Navbar fluid rounded className="shadow-md sticky top-0 z-50">
       <Navbar.Brand href="https://flowbite-react.com">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
           Админ панель

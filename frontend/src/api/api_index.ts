@@ -10,6 +10,7 @@ import { Admin } from '../../../backend/node_modules/@prisma/client';
 import { PackageType } from '../components/package/PackagesTable';
 import { logout } from '../redux/auth/slice';
 import { GetPackageDto } from '../../../backend/src/package/dto/get-package.dto';
+import { CreatePackageDto } from '../../../backend/src/package/dto/create-package.dto';
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
 // export type RecordSiteBody = Pick<TSite, 'Favicon' | 'Title' | 'Domain'>;
@@ -34,7 +35,15 @@ export type FetchAllPackage = {
 
 export type FetchAllPackagesResponse = FetchAllPackage[];
 
-export type FetchPackageResponse = PackageType;
+export interface FetchPackageResponse extends Omit<PackageType, "start_date" | "expected_delivery_date"> {
+  start_date: string;
+  expected_delivery_date: string;
+}
+
+export interface CreatePackageBody extends Omit<CreatePackageDto, "start_date" | "expected_delivery_date"> {
+  start_date: string;
+  expected_delivery_date: string;
+}
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_BACKEND_URL,
@@ -128,11 +137,18 @@ export const appApi = createApi({
     }),
     updatePackage: builder.mutation<
       FetchPackageResponse,
-      { id: string; data: Partial<Exclude<GetPackageDto, 'routeId'>> }
+      { id: string; data: Partial<Exclude<CreatePackageBody, 'routeId'>> }
     >({
       query: ({ id, data }) => ({
         url: `/package/${id}`,
         method: 'PATCH',
+        body: data,
+      }),
+    }),
+    createPackage: builder.mutation<FetchPackageResponse, CreatePackageBody>({
+      query: (data) => ({
+        url: `/package`,
+        method: 'POST',
         body: data,
       }),
     }),
@@ -149,4 +165,5 @@ export const {
   useFetchAllPackagesQuery,
   useLazyFetchPackageQuery,
   useUpdatePackageMutation,
+  useCreatePackageMutation,
 } = appApi;
