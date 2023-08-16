@@ -37,7 +37,7 @@ export class PackageController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.packageService.findOne(+id);
+    return this.packageService.findOne(id);
   }
 
   @Patch(':id')

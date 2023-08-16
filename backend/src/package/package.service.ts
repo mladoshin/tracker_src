@@ -26,12 +26,28 @@ export class PackageService {
     });
   }
 
-  findAll() {
-    return `This action returns all package`;
+  async findAll() {
+    return await this.prisma.package.findMany({
+      select: {
+        name: true,
+        tracking_number: true,
+        status: true,
+        start_date: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} package`;
+  async findOne(id: string) {
+    return await this.prisma.package.findFirst({
+      where: { tracking_number: id },
+      include: {
+        route: {
+          include: {
+            steps: true,
+          },
+        },
+      },
+    });
   }
 
   async update(
