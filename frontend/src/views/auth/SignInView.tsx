@@ -4,8 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../api/api_index';
 import { useTypedDispatch } from '../../redux/hooks';
 import { IUser, setUser } from '../../redux/auth/slice';
-import jwt_decode from 'jwt-decode';
-import { toast } from 'react-toastify';
 
 function SignInView() {
   const [email, setEmail] = useState('');
@@ -24,8 +22,8 @@ function SignInView() {
           id: res.user.id,
         }),
       );
-      await localStorage.setItem('access_token', res.access_token);
-      navigate('/account/');
+      await sessionStorage.setItem('access_token', res.access_token);
+      navigate('/panel/');
     } catch (e) {
       console.log(e);
     }

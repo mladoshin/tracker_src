@@ -20,7 +20,7 @@ function ProtectedRoute() {
   async function refreshAccess() {
     try {
       const res = await refreshToken().unwrap();
-      localStorage.setItem('access_token', res.access_token);
+      sessionStorage.setItem('access_token', res.access_token);
       const user: IUser = jwtDecode(res.access_token);
       dispatch(setUser(user));
     } catch (e) {
