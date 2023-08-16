@@ -49,7 +49,7 @@ function PackageRow({ p }: { p: PackageType }) {
       <Table.Cell>{p.status}</Table.Cell>
       <Table.Cell>
         <Link
-          to={`/account/sales/${p.tracking_number}`}
+          to={`/panel/packages/${p.tracking_number}`}
           className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
           <p>Открыть</p>
         </Link>

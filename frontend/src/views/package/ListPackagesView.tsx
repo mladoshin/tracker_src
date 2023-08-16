@@ -2,8 +2,11 @@ import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import { BsSearch } from 'react-icons/bs';
 import PackagesTable from '../../components/package/PackagesTable';
+import { useFetchAllPackagesQuery } from '../../api/api_index';
 
 function ListPackagesView() {
+  const { data: packages, refetch } = useFetchAllPackagesQuery();
+
   return (
     <div>
       <div className="flex flex-row justify-between">
@@ -29,7 +32,7 @@ function ListPackagesView() {
       </div>
 
       <div>
-        <PackagesTable packages={[]} />
+        <PackagesTable packages={packages} />
       </div>
     </div>
   );

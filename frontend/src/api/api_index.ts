@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../redux/store';
-import { User } from '../../../backend/node_modules/@prisma/client';
+import { Admin } from '../../../backend/node_modules/@prisma/client';
+import { PackageType } from '../components/package/PackagesTable';
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
 // export type RecordSiteBody = Pick<TSite, 'Favicon' | 'Title' | 'Domain'>;
@@ -9,16 +10,26 @@ import { User } from '../../../backend/node_modules/@prisma/client';
 type LoginResponse = {
   access_token: string;
   refreshToken: string;
-  user: Pick<User, 'id' | 'email' | 'name'>;
+  user: Pick<Admin, 'id' | 'email' | 'name'>;
 };
 
 type RefreshAccessResponse = {
   access_token: string;
 };
+
+type FetchAllPackagesResponse = {
+  name: string;
+  tracking_number: string;
+  status: string;
+  start_date: string;
+}[];
+
+type FetchPackageResponse = PackageType[];
+
 // Define a service using a base URL and expected endpoints
 export const appApi = createApi({
   reducerPath: 'appApi',
-  tagTypes: ['Sites', 'User'],
+  tagTypes: ['Packages', 'Routes'],
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BACKEND_URL,
     credentials: 'include',
@@ -32,7 +43,7 @@ export const appApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<LoginResponse, Pick<User, 'email' | 'pass'>>({
+    login: builder.mutation<LoginResponse, Pick<Admin, 'email' | 'pass'>>({
       // query: (clientId) => `/clients/${clientId}/sites`,
       query: (body) => ({
         url: `auth/login`,
@@ -48,7 +59,7 @@ export const appApi = createApi({
     }),
     register: builder.mutation<
       LoginResponse,
-      Pick<User, 'email' | 'pass' | 'name'>
+      Pick<Admin, 'email' | 'pass' | 'name'>
     >({
       query: (body) => ({
         url: `/auth/register`,
@@ -63,6 +74,16 @@ export const appApi = createApi({
         credentials: 'include',
       }),
     }),
+    fetchAllPackages: builder.query<FetchAllPackagesResponse, void>({
+      query: () => ({
+        url: `package`,
+      }),
+    }),
+    fetchPackage: builder.query<FetchPackageResponse, string>({
+      query: (id) => ({
+        url: `package/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -73,4 +94,6 @@ export const {
   useRegisterMutation,
   useLazyRefreshAccessQuery,
   useLogoutMutation,
+  useFetchAllPackagesQuery,
+  useLazyFetchPackageQuery
 } = appApi;
