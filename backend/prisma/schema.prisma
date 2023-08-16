@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id            Int    @id @default(autoincrement())
+  name          String
+  email         String @unique
+  pass          String
+  refresh_token String @default("")
+}
+
+model Package {
+  tracking_number        String   @id @default(uuid())
+  name                   String
+  weight                 Float
+  mode                   String
+  payment_mode           String
+  carrier                String
+  destination            String
+  status                 String
+  expected_delivery_date DateTime
+  comment                String
+  shipment               String
+  receiver_name          String
+  receiver_phone         String
+  receiver_email         String
+  receiver_address       String
+  start_address          String
+  start_date             DateTime
+  route Route @relation(fields: [routeId], references: [id])
+  routeId String @unique
+}
+
+model Route {
+  id      String      @id @default(uuid())
+  steps   RouteStep[]
+  package Package?
+}
+
+model RouteStep {
+  id        String   @id @default(uuid())
+  name      String @unique
+  address   String
+  timeout   Int
+  createdAt DateTime @default(now())
+  route     Route?    @relation(fields: [routeId], references: [id])
+  routeId   String?
+}
+
+model RoutePreset {
+  id        String   @id @default(uuid())
+  steps Json?
+}

@@ -1,0 +1,66 @@
+version: '3.7'
+name: sellerator-prod
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ../frontend/
+      dockerfile: ../docker/frontend/Dockerfile
+      target: prod
+    volumes:
+      - frontend_build:/build
+    depends_on:
+      - postgres
+  backend:
+    container_name: backend
+    build:
+      context: ../backend/
+      dockerfile: ../docker/backend/Dockerfile
+      target: prod
+    ports:
+      - ${API_PORT}:3000
+    command: node dist/main.js
+    env_file:
+      - .env.dist
+    depends_on:
+      - postgres
+  webserver:
+    image: nginx:1.25.1-alpine
+    container_name: webserver
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ../webserver/cert:/etc/letsencrypt
+      - ../webserver/certbot/www:/var/www/certbot/:ro
+      - frontend_build:/www
+      - ./webserver/conf.template:/etc/nginx/templates/10-variables.conf.template:ro
+    env_file:
+      - .env.dist
+    depends_on:
+      - backend
+      - frontend
+    profiles:
+      - main
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ../webserver/cert:/etc/letsencrypt
+      - ../webserver/certbot/www:/var/www/certbot/:rw
+    profiles:
+      - main
+  postgres:
+    container_name: postgres
+    image: postgres:15.3-alpine
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  frontend_build:
+  pgdata:

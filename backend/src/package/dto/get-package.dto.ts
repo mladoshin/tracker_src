@@ -1,0 +1,19 @@
+export class GetPackageDto {
+  tracking_number: string;
+  name: string;
+  weight: number;
+  mode: string;
+  payment_mode: string;
+  carrier: string;
+  destination: string;
+  status: string;
+  expected_delivery_date: Date;
+  comment: string;
+  shipment: string;
+  receiver_name: string;
+  receiver_phone: string;
+  receiver_email: string;
+  receiver_address: string;
+  start_address: string;
+  start_date: Date;
+}
