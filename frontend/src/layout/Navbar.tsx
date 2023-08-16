@@ -2,15 +2,10 @@ import { Avatar, Dropdown, Navbar } from 'flowbite-react';
 
 export default function TopNavbar() {
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid rounded className="shadow-md">
       <Navbar.Brand href="https://flowbite-react.com">
-        <img
-          alt="Flowbite React Logo"
-          className="mr-3 h-6 sm:h-9"
-          src="/favicon.svg"
-        />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Flowbite React
+          Админ панель
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
@@ -29,11 +24,11 @@ export default function TopNavbar() {
               name@flowbite.com
             </span>
           </Dropdown.Header>
-          <Dropdown.Item>Dashboard</Dropdown.Item>
-          <Dropdown.Item>Settings</Dropdown.Item>
-          <Dropdown.Item>Earnings</Dropdown.Item>
+          <Dropdown.Item>Аккаунт</Dropdown.Item>
+          <Dropdown.Item>Посылки</Dropdown.Item>
+          <Dropdown.Item>Маршруты</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
+          <Dropdown.Item>Выйти</Dropdown.Item>
         </Dropdown>
         <Navbar.Toggle />
       </div>

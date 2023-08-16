@@ -10,40 +10,35 @@ import {
   HiUser,
   HiViewBoards,
 } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
-export default function ContentSeparator() {
+export default function AppSidebar() {
+  const navigate = useNavigate();
   return (
-    <Sidebar aria-label="Sidebar with content separator example">
+    <Sidebar
+      aria-label="Sidebar with content separator example"
+      className="fixed w-60 top-16 left-0 shadow-md">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            <p>Dashboard</p>
+          <Sidebar.Item
+            onClick={() => navigate('/panel/account')}
+            icon={HiChartPie}>
+            <p>Аккаунт</p>
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiViewBoards}>
-            <p>Kanban</p>
+          <Sidebar.Item
+            onClick={() => navigate('/panel/packages')}
+            icon={HiViewBoards}>
+            <p>Посылки</p>
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiInbox}>
-            <p>Inbox</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiUser}>
-            <p>Users</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiShoppingBag}>
-            <p>Products</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiArrowSmRight}>
-            <p>Sign In</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiTable}>
-            <p>Sign Up</p>
+          <Sidebar.Item
+            onClick={() => navigate('/panel/routes')}
+            icon={HiInbox}>
+            <p>Маршруты</p>
           </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            <p>Upgrade to Pro</p>
-          </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiViewBoards}>
-            <p>Documentation</p>
+          <Sidebar.Item href="#" icon={HiUser}>
+            <p>Выйти</p>
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

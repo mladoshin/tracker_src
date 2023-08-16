@@ -1,3 +1,5 @@
+import { GetRoute, Route } from './create-package.dto';
+
 export class GetPackageDto {
   tracking_number: string;
   name: string;
@@ -16,4 +18,5 @@ export class GetPackageDto {
   receiver_address: string;
   start_address: string;
   start_date: Date;
+  route: GetRoute;
 }

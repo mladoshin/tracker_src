@@ -10,6 +10,11 @@ import SignInView from './views/auth/SignInView';
 import SignUpView from './views/auth/SignUpView';
 import ProtectedRoute from './ProtectedRoute';
 import Account from './views/account';
+import Layout from './layout/Layout';
+import ListRoutesView from './views/route/ListRoutesView';
+import RouteView from './views/route/RouteView';
+import ListPackagesView from './views/package/ListPackagesView';
+import PackageView from './views/package/PackageView';
 
 function App() {
   return (
@@ -19,8 +24,15 @@ function App() {
       <Routes>
         <Route path="/" element={<h1>Main page</h1>}/>
         <Route path="signin" element={<SignInView/>}/>
-        <Route path="account" element={<ProtectedRoute/>}>
-          <Route path="" element={<Account/>}/>
+        <Route path="panel" element={<ProtectedRoute/>}>
+          <Route path="" element={<Layout />}>
+            <Route path="account" element={<Account/>}/>
+            <Route path="routes" element={<ListRoutesView/>}/>
+            <Route path="routes/:routeId" element={<RouteView/>}/>
+
+            <Route path="packages" element={<ListPackagesView/>}/>
+            <Route path="packages/:packageId" element={<PackageView/>}/>
+          </Route>
         </Route>
       </Routes>
       </BrowserRouter>

@@ -46,7 +46,28 @@ export class Route {
   steps: RouteStep[];
 }
 
+export class GetRoute {
+  id: string;
+  @IsArray({ message: 'Шаги должны быть массивом' })
+  @ArrayNotEmpty({ message: 'Массив шагов не может быть пустым' })
+  steps: RouteStep[];
+}
+
 export class RouteStep {
+  @IsNotEmpty()
+  name: string;
+  @IsNotEmpty()
+  address: string;
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  timeout: number;
+  @IsDateString()
+  createdAt?: Date;
+}
+
+export class GetRouteStep {
+  id: string;
   @IsNotEmpty()
   name: string;
   @IsNotEmpty()
