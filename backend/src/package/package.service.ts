@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePackageDto, Route } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { PrismaService } from 'src/prisma.service';
+import { setFips } from 'crypto';
 
 @Injectable()
 export class PackageService {
@@ -90,10 +91,10 @@ export class PackageService {
         route: {
           update: {
             steps: {
-              connectOrCreate: route_data.steps.map((d) => ({
-                where: { name: d.name },
-                create: { ...d },
-              })),
+              createMany: {
+                data: route_data.steps.map((d) => ({ ...d })),
+                skipDuplicates: true,
+              },
             },
           },
         },
@@ -103,7 +104,15 @@ export class PackageService {
     return p3;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} package`;
+  async remove(id: string) {
+    const res = await this.prisma.package.delete({
+      where: { tracking_number: id },
+    });
+
+    const res1 = await this.prisma.route.delete({
+      where: { id: res.routeId },
+    });
+
+    return res;
   }
 }

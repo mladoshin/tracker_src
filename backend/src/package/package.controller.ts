@@ -58,6 +58,6 @@ export class PackageController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.packageService.remove(+id);
+    return this.packageService.remove(id);
   }
 }

@@ -67,7 +67,7 @@ const baseQueryWithReauth: BaseQueryFn<
   if (result.error && result.error.status === 401) {
     if ((args as any).url === 'auth/refresh') {
       api.dispatch(logout());
-      window.location.href = `${window.location.origin}/signin`;
+      window.location.href = `${window.location.origin}/admin/signin`;
       return result;
     }
     // try to get a new token
@@ -82,7 +82,7 @@ const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
-      window.location.href = `${window.location.origin}/signin`;
+      window.location.href = `${window.location.origin}/admin/signin`;
     }
   }
   return result;
@@ -129,6 +129,7 @@ export const appApi = createApi({
       query: () => ({
         url: `package`,
       }),
+      providesTags: ["Packages"]
     }),
     fetchPackage: builder.query<FetchPackageResponse, string>({
       query: (id) => ({
@@ -144,6 +145,7 @@ export const appApi = createApi({
         method: 'PATCH',
         body: data,
       }),
+      invalidatesTags: ["Packages"]
     }),
     createPackage: builder.mutation<FetchPackageResponse, CreatePackageBody>({
       query: (data) => ({
@@ -151,6 +153,14 @@ export const appApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ["Packages"]
+    }),
+    deletePackage: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/package/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ["Packages"]
     }),
   }),
 });
@@ -166,4 +176,5 @@ export const {
   useLazyFetchPackageQuery,
   useUpdatePackageMutation,
   useCreatePackageMutation,
+  useDeletePackageMutation
 } = appApi;

@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures=["referentialActions"]
 }
 
 datasource db {
@@ -33,27 +34,27 @@ model Package {
   receiver_address       String
   start_address          String
   start_date             DateTime
-  route Route @relation(fields: [routeId], references: [id])
-  routeId String @unique
+  routeId                String   @unique
+  route                  Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model Route {
   id      String      @id @default(uuid())
-  steps   RouteStep[]
   package Package?
+  steps   RouteStep[]
 }
 
 model RouteStep {
   id        String   @id @default(uuid())
-  name      String @unique
+  name      String   @unique
   address   String
   timeout   Int
   createdAt DateTime @default(now())
-  route     Route?    @relation(fields: [routeId], references: [id])
-  routeId   String?
+  routeId   String
+  route     Route   @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model RoutePreset {
-  id        String   @id @default(uuid())
+  id    String @id @default(uuid())
   steps Json?
 }
