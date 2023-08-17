@@ -22,12 +22,27 @@ export class RouteController {
     const preset = await this.routeService.create(createRouteDto);
     const steps: RouteStep[] = JSON.parse(preset.steps as string);
     const count = steps.length;
-    return { ...preset, from: steps[0]?.name, to: steps[count - 1]?.name };
+    return {
+      ...preset,
+      from: steps[0]?.name,
+      to: steps[count - 1]?.name,
+      steps,
+    };
   }
 
   @Get()
-  findAll() {
-    return this.routeService.findAll();
+  async findAll() {
+    const res = await this.routeService.findAll();
+    return res.map((r) => {
+      const steps: RouteStep[] = JSON.parse(r.steps as string);
+      const count = steps.length;
+      return {
+        ...r,
+        from: steps[0]?.name,
+        to: steps[count - 1]?.name,
+        steps,
+      };
+    });
   }
 
   @Get(':id')
@@ -35,7 +50,12 @@ export class RouteController {
     const preset = await this.routeService.findOne(id);
     const steps: RouteStep[] = JSON.parse(preset.steps as string);
     const count = steps.length;
-    return { ...preset, from: steps[0]?.name, to: steps[count - 1]?.name };
+    return {
+      ...preset,
+      from: steps[0]?.name,
+      to: steps[count - 1]?.name,
+      steps,
+    };
   }
 
   @Patch(':id')
@@ -46,7 +66,12 @@ export class RouteController {
     const preset = await this.routeService.update(id, updateRouteDto);
     const steps: RouteStep[] = JSON.parse(preset.steps as string);
     const count = steps.length;
-    return { ...preset, from: steps[0]?.name, to: steps[count - 1]?.name };
+    return {
+      ...preset,
+      from: steps[0]?.name,
+      to: steps[count - 1]?.name,
+      steps,
+    };
   }
 
   @Delete(':id')

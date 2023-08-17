@@ -1,18 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   CreatePackageBody,
   FetchPackageResponse,
   useCreatePackageMutation,
   useLazyFetchPackageQuery,
+  useLazyGetRouteQuery,
   useUpdatePackageMutation,
 } from '../../api/api_index';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import { Button, Label, TextInput } from 'flowbite-react';
 import RouteForm from '../../components/package/RouteForm';
-import { GetPackageDto } from '../../../../backend/src/package/dto/get-package.dto';
 import { PackageType } from '../../components/package/PackagesTable';
 import moment from 'moment';
+import RoutePresetSelectModal from '../../components/route/RoutePresetSelectModal';
 
 const initValues = {
   carrier: '',
@@ -44,6 +45,8 @@ function PackageView() {
   const [updatePackage, { isLoading }] = useUpdatePackageMutation();
   const [createPackage, { isLoading: isCreateLoading }] =
     useCreatePackageMutation();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [getRoutePreset] = useLazyGetRouteQuery();
   const navigate = useNavigate();
 
   const formikRef = useRef(null);
@@ -66,6 +69,20 @@ function PackageView() {
     } else {
       await fetch(packageId as string);
     }
+  }
+
+  async function handleLoadPreset(id: string) {
+    setModalOpen(false);
+    console.log(id);
+    try {
+      const preset = await getRoutePreset(id).unwrap();
+      console.log(preset);
+
+      await (formikRef.current as any).setFieldValue(
+        'route.steps',
+        preset.steps,
+      );
+    } catch {}
   }
 
   return (
@@ -93,8 +110,8 @@ function PackageView() {
           if (packageId === 'new') {
             //create new package
 
-            createPackage(body)
-            navigate('/panel/packages')
+            createPackage(body);
+            navigate('/panel/packages');
           } else {
             updatePackage({ id: packageId as string, data: body });
           }
@@ -287,9 +304,13 @@ function PackageView() {
                 name="receiver_phone"
               />
             </div>
+            <hr className="my-4" />
+            <div className="my-7 flex items-center gap-6">
+              <Label htmlFor="route" value="Маршрут" className="text-xl" />
 
-            <div className="mb-2 block">
-              <Label htmlFor="route" value="Маршрут" />
+              <Button color="gray" onClick={() => setModalOpen(true)}>
+                Загрузить маршрут
+              </Button>
             </div>
 
             <RouteForm
@@ -313,6 +334,12 @@ function PackageView() {
           </form>
         )}
       </Formik>
+
+      <RoutePresetSelectModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSuccess={handleLoadPreset}
+      />
     </div>
   );
 }

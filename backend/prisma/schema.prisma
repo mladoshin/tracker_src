@@ -34,6 +34,7 @@ model Package {
   receiver_address       String
   start_address          String
   start_date             DateTime
+  createdAt DateTime @default(now())
   routeId                String   @unique
   route                  Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }

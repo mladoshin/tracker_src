@@ -37,7 +37,7 @@ function RouteForm({ values, handleChange, handleBlur }: IRouteFormProps) {
         {values.map((step, idx) => (
           <Table.Row
             className="bg-white dark:border-gray-700 dark:bg-gray-800"
-            key={step.id}>
+            key={(step as any).id || idx}>
             <Table.Cell className="whitespace-nowrap font-mediu">
               <Button
                 className="text-red-600 bg-transparent hover:bg-gray-200"

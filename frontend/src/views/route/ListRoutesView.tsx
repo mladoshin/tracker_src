@@ -2,8 +2,13 @@ import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import { BsSearch } from 'react-icons/bs';
 import RoutesTable from '../../components/route/RoutesTable';
+import { useGetAllRoutesQuery } from '../../api/api_index';
+import { GetRouteDto } from '../../../../backend/src/route/dto/get-route.dto';
+import { useNavigate } from 'react-router-dom';
 
 function ListRoutesView() {
+  const { data: routes } = useGetAllRoutesQuery();
+  const navigate = useNavigate()
   return (
     <div>
       <div className="flex flex-row justify-between">
@@ -23,11 +28,11 @@ function ListRoutesView() {
       </div>
 
       <div>
-        <RoutesTable routes={[]} />
+        <RoutesTable routes={routes as GetRouteDto[]} />
       </div>
 
       <div className="mt-7">
-        <Button onClick={()=>{}}>Добавить маршрут</Button>
+        <Button onClick={() => navigate('/panel/routes/new')}>Добавить маршрут</Button>
       </div>
     </div>
   );

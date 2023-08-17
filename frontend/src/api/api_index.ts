@@ -9,8 +9,10 @@ import { RootState } from '../redux/store';
 import { Admin } from '../../../backend/node_modules/@prisma/client';
 import { PackageType } from '../components/package/PackagesTable';
 import { logout } from '../redux/auth/slice';
-import { GetPackageDto } from '../../../backend/src/package/dto/get-package.dto';
+import { GetRouteDto } from '../../../backend/src/route/dto/get-route.dto';
 import { CreatePackageDto } from '../../../backend/src/package/dto/create-package.dto';
+import { CreateRouteDto } from '../../../backend/src/route/dto/create-route.dto';
+
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
 // export type RecordSiteBody = Pick<TSite, 'Favicon' | 'Title' | 'Domain'>;
@@ -35,12 +37,14 @@ export type FetchAllPackage = {
 
 export type FetchAllPackagesResponse = FetchAllPackage[];
 
-export interface FetchPackageResponse extends Omit<PackageType, "start_date" | "expected_delivery_date"> {
+export interface FetchPackageResponse
+  extends Omit<PackageType, 'start_date' | 'expected_delivery_date'> {
   start_date: string;
   expected_delivery_date: string;
 }
 
-export interface CreatePackageBody extends Omit<CreatePackageDto, "start_date" | "expected_delivery_date"> {
+export interface CreatePackageBody
+  extends Omit<CreatePackageDto, 'start_date' | 'expected_delivery_date'> {
   start_date: string;
   expected_delivery_date: string;
 }
@@ -91,7 +95,7 @@ const baseQueryWithReauth: BaseQueryFn<
 // Define a service using a base URL and expected endpoints
 export const appApi = createApi({
   reducerPath: 'appApi',
-  tagTypes: ['Packages', 'Routes'],
+  tagTypes: ['Packages', 'Routes', 'Route'],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, Pick<Admin, 'email' | 'pass'>>({
@@ -129,7 +133,7 @@ export const appApi = createApi({
       query: () => ({
         url: `package`,
       }),
-      providesTags: ["Packages"]
+      providesTags: ['Packages'],
     }),
     fetchPackage: builder.query<FetchPackageResponse, string>({
       query: (id) => ({
@@ -145,7 +149,7 @@ export const appApi = createApi({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: ["Packages"]
+      invalidatesTags: ['Packages'],
     }),
     createPackage: builder.mutation<FetchPackageResponse, CreatePackageBody>({
       query: (data) => ({
@@ -153,14 +157,52 @@ export const appApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ["Packages"]
+      invalidatesTags: ['Packages'],
     }),
     deletePackage: builder.mutation<void, string>({
       query: (id) => ({
         url: `/package/${id}`,
-        method: 'DELETE'
+        method: 'DELETE',
       }),
-      invalidatesTags: ["Packages"]
+      invalidatesTags: ['Packages'],
+    }),
+    getAllRoutes: builder.query<GetRouteDto[], void>({
+      query: () => ({
+        url: `route`,
+      }),
+      providesTags: ['Routes'],
+    }),
+    getRoute: builder.query<GetRouteDto, string>({
+      query: (id) => ({
+        url: `route/${id}`,
+      }),
+      providesTags: ['Route'],
+    }),
+    deleteRoute: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/route/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Routes'],
+    }),
+    createRoute: builder.mutation<GetRouteDto, CreateRouteDto>({
+      query: (data) => ({
+        url: `/route`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Routes'],
+    }),
+    updateRoute: builder.mutation<
+      GetRouteDto,
+      { id: string; data: CreateRouteDto }
+    >({
+      query: ({ id, data }) => ({
+        url: `/route/${id}`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Routes'],
     }),
   }),
 });
@@ -176,5 +218,10 @@ export const {
   useLazyFetchPackageQuery,
   useUpdatePackageMutation,
   useCreatePackageMutation,
-  useDeletePackageMutation
+  useDeletePackageMutation,
+  useGetAllRoutesQuery,
+  useLazyGetRouteQuery,
+  useCreateRouteMutation,
+  useUpdateRouteMutation,
+  useDeleteRouteMutation,
 } = appApi;
