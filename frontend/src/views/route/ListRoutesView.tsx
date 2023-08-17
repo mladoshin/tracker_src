@@ -1,6 +1,7 @@
 import { Button, TextInput } from 'flowbite-react';
 import React from 'react';
 import { BsSearch } from 'react-icons/bs';
+import RoutesTable from '../../components/route/RoutesTable';
 
 function ListRoutesView() {
   return (
@@ -19,6 +20,14 @@ function ListRoutesView() {
         />
 
         <Button color="gray">Поиск</Button>
+      </div>
+
+      <div>
+        <RoutesTable routes={[]} />
+      </div>
+
+      <div className="mt-7">
+        <Button onClick={()=>{}}>Добавить маршрут</Button>
       </div>
     </div>
   );

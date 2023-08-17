@@ -16,7 +16,7 @@ services:
       - PORT=${FRONTEND_PORT}
     command: yarn start-frontend
     depends_on:
-      - postgres
+      - tracker_postgres
   backend:
     container_name: backend
     build:
@@ -32,9 +32,9 @@ services:
     env_file:
       - .env.dist
     depends_on:
-      - postgres
-  postgres:
-    container_name: postgres
+      - tracker_postgres
+  tracker_postgres:
+    container_name: tracker_postgres
     image: postgres:15.3-alpine
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
