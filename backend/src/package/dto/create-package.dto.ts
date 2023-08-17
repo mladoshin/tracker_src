@@ -10,6 +10,7 @@ import {
   IsArray,
   ArrayNotEmpty,
   IsAlphanumeric,
+  IsOptional,
 } from 'class-validator';
 export class CreatePackageDto {
   name: string;
@@ -66,6 +67,7 @@ export class RouteStep {
   @IsNotEmpty()
   @Min(0)
   timeout: number;
+  @IsOptional()
   @IsDateString()
   createdAt?: Date;
 
