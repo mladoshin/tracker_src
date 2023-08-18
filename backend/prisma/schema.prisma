@@ -48,7 +48,7 @@ model Route {
 
 model RouteStep {
   id        String   @id @default(uuid())
-  name      String   @unique
+  name      String   
   address   String
   timeout   Int
   createdAt DateTime @default(now())
