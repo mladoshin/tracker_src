@@ -12,6 +12,7 @@ import { logout } from '../redux/auth/slice';
 import { GetRouteDto } from '../../../backend/src/route/dto/get-route.dto';
 import { CreatePackageDto } from '../../../backend/src/package/dto/create-package.dto';
 import { CreateRouteDto } from '../../../backend/src/route/dto/create-route.dto';
+import { GetPackageDto } from '../../../backend/src/package/dto/get-package.dto';
 
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
@@ -31,6 +32,7 @@ type RefreshAccessResponse = {
 export type FetchAllPackage = {
   name: string;
   tracking_number: string;
+  tracking_id: string;
   status: string;
   start_date: string;
 };
@@ -38,7 +40,7 @@ export type FetchAllPackage = {
 export type FetchAllPackagesResponse = FetchAllPackage[];
 
 export interface FetchPackageResponse
-  extends Omit<PackageType, 'start_date' | 'expected_delivery_date'> {
+  extends Omit<GetPackageDto, 'start_date' | 'expected_delivery_date'> {
   start_date: string;
   expected_delivery_date: string;
 }
@@ -137,7 +139,7 @@ export const appApi = createApi({
     }),
     fetchPackage: builder.query<FetchPackageResponse, string>({
       query: (id) => ({
-        url: `package/${id}`,
+        url: `package/${id}/admin`,
       }),
     }),
     updatePackage: builder.mutation<

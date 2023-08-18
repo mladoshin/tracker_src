@@ -8,8 +8,9 @@ import {
   useDeletePackageMutation,
 } from '../../api/api_index';
 import { MdDelete } from 'react-icons/md';
+import { CreatePackageDto } from '../../../../backend/src/package/dto/create-package.dto';
 
-export type PackageType = GetPackageDto;
+export type PackageType = CreatePackageDto;
 
 interface ISalesTableProps {
   packages: FetchAllPackagesResponse;
@@ -50,7 +51,7 @@ function PackageRow({ p }: { p: FetchAllPackage }) {
       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
         {p.name}
       </Table.Cell>
-      <Table.Cell>{p.tracking_number}</Table.Cell>
+      <Table.Cell>{p.tracking_id}</Table.Cell>
       <Table.Cell>{p.status}</Table.Cell>
       <Table.Cell>
         <div className="flex items-center gap-4">

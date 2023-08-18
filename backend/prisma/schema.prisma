@@ -18,6 +18,7 @@ model Admin {
 
 model Package {
   tracking_number        String   @id @default(uuid())
+  tracking_id  String @unique
   name                   String
   weight                 Float
   mode                   String

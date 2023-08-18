@@ -3,6 +3,8 @@ import { CreatePackageDto, Route } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { PrismaService } from 'src/prisma.service';
 import { setFips } from 'crypto';
+import { getPackageStatus } from './utils/getPackageStatus';
+import { genTrackingNumber } from './utils/genTrackingNumber';
 
 @Injectable()
 export class PackageService {
@@ -14,6 +16,7 @@ export class PackageService {
     return await this.prisma.package.create({
       data: {
         ...parcel_data,
+        tracking_id: genTrackingNumber(),
         route: {
           create: {
             steps: {
@@ -28,18 +31,26 @@ export class PackageService {
   }
 
   async findAll() {
-    return await this.prisma.package.findMany({
-      select: {
-        name: true,
-        tracking_number: true,
-        status: true,
-        start_date: true,
+    const parcels = await this.prisma.package.findMany({
+      include: {
+        route: {
+          include: {
+            steps: true,
+          },
+        },
       },
     });
+
+    return parcels.map((p) => ({
+      name: p.name,
+      tracking_number: p.tracking_number,
+      tracking_id: p.tracking_id,
+      status: getPackageStatus(p),
+    }));
   }
 
   async findOne(id: string) {
-    return await this.prisma.package.findFirst({
+    const res = await this.prisma.package.findFirst({
       where: { tracking_number: id },
       include: {
         route: {
@@ -49,6 +60,23 @@ export class PackageService {
         },
       },
     });
+    const status = getPackageStatus(res);
+    return { ...res, status };
+  }
+
+  async findOnePublic(id: string) {
+    const res = await this.prisma.package.findFirst({
+      where: { tracking_id: id },
+      include: {
+        route: {
+          include: {
+            steps: true,
+          },
+        },
+      },
+    });
+    const status = getPackageStatus(res);
+    return { ...res, status };
   }
 
   async update(

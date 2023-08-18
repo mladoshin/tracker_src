@@ -15,7 +15,7 @@ import { PackageType } from '../../components/package/PackagesTable';
 import moment from 'moment';
 import RoutePresetSelectModal from '../../components/route/RoutePresetSelectModal';
 
-const initValues = {
+const initValues: PackageType = {
   carrier: '',
   comment: '',
   destination: '',
@@ -28,14 +28,12 @@ const initValues = {
   receiver_name: '',
   receiver_phone: '',
   route: {
-    id: '',
     steps: [],
   },
   shipment: '',
   start_address: '',
   start_date: new Date(),
   status: '',
-  tracking_number: '',
   weight: 10,
 };
 
@@ -89,8 +87,9 @@ function PackageView() {
     <div>
       <div className="flex flex-row justify-between">
         <h2 className="font-bold text-3xl">
-          Посылка {data?.name} {data?.tracking_number}
+          Посылка {data?.name}
         </h2>
+        <p>Трек номер: {data?.tracking_id}</p>
       </div>
       <Formik
         innerRef={formikRef}

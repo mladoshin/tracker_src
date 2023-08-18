@@ -14,6 +14,7 @@ import { PackageService } from './package.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { GetPublicPackageDto } from './dto/get-package.dto';
 
 @Controller('package')
 export class PackageController {
@@ -38,9 +39,16 @@ export class PackageController {
     return this.packageService.findAll();
   }
 
-  @Get(':id')
+  @Get(':id/admin')
   async findOne(@Param('id') id: string) {
     return await this.packageService.findOne(id);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':id')
+  async findOnePublic(@Param('id') id: string): Promise<GetPublicPackageDto> {
+    const res = await this.packageService.findOnePublic(id);
+    return new GetPublicPackageDto({ ...res });
   }
 
   @Patch(':id')
