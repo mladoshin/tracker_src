@@ -53,12 +53,13 @@ export interface CreatePackageBody
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.REACT_APP_BACKEND_URL,
-  credentials: 'include',
+  credentials: 'same-origin',
   prepareHeaders: (headers) => {
     const token = window.sessionStorage.getItem('access_token');
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
+    headers.set('Access-Control-Allow-Origin', '*');
     return headers;
   },
 });
@@ -111,7 +112,6 @@ export const appApi = createApi({
     refreshAccess: builder.query<RefreshAccessResponse, void>({
       query: () => ({
         url: `auth/refresh`,
-        credentials: 'include',
       }),
     }),
     register: builder.mutation<

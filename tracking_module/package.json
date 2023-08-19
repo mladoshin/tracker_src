@@ -2,6 +2,7 @@
   "name": "tracking_module",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://154.56.56.201/admin/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

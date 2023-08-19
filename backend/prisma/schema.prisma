@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures=["referentialActions"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 datasource db {
@@ -18,7 +18,6 @@ model Admin {
 
 model Package {
   tracking_number        String   @id @default(uuid())
-  tracking_id  String @unique
   name                   String
   weight                 Float
   mode                   String
@@ -35,8 +34,9 @@ model Package {
   receiver_address       String
   start_address          String
   start_date             DateTime
-  createdAt DateTime @default(now())
   routeId                String   @unique
+  createdAt              DateTime @default(now())
+  tracking_id            String   @unique
   route                  Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
@@ -48,16 +48,16 @@ model Route {
 
 model RouteStep {
   id        String   @id @default(uuid())
-  name      String   
+  name      String
   address   String
   timeout   Int
   createdAt DateTime @default(now())
   routeId   String
-  route     Route   @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  route     Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 }
 
 model RoutePreset {
   id    String @id @default(uuid())
-  name String
   steps Json?
+  name  String
 }
