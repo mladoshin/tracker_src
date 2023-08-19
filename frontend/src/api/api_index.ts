@@ -107,11 +107,13 @@ export const appApi = createApi({
         url: `auth/login`,
         method: 'POST',
         body: body,
+        credentials: "include"
       }),
     }),
     refreshAccess: builder.query<RefreshAccessResponse, void>({
       query: () => ({
         url: `auth/refresh`,
+        credentials: 'same-origin',
       }),
     }),
     register: builder.mutation<
@@ -122,13 +124,16 @@ export const appApi = createApi({
         url: `/auth/register`,
         method: 'POST',
         body: body,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
       }),
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
         url: `/auth/logout`,
         method: 'POST',
-        credentials: 'include',
+        //credentials: 'include',
       }),
     }),
     fetchAllPackages: builder.query<FetchAllPackagesResponse, void>({
