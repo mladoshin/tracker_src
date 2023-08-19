@@ -70,7 +70,11 @@ export class PackageService {
       include: {
         route: {
           include: {
-            steps: true,
+            steps: {
+              orderBy: {
+                timeout: 'asc',
+              },
+            },
           },
         },
       },
