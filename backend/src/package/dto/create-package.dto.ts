@@ -13,6 +13,7 @@ import {
   IsOptional,
 } from 'class-validator';
 export class CreatePackageDto {
+  @IsNotEmpty({ message: 'Имя не может быть пустым' })
   name: string;
   @IsNotEmpty({ message: 'Вес не может быть пустым' })
   @IsNumber({ allowInfinity: false }, { message: 'Вес должен быть числом' })
@@ -31,10 +32,9 @@ export class CreatePackageDto {
   shipment: string;
   @IsNotEmpty({ message: 'Имя адресата не может быть пустым' })
   receiver_name: string;
-  @IsNotEmpty({ message: 'Телефон адресата не может быть пустым' })
+  @IsOptional()
   receiver_phone: string;
-  @IsEmail({}, { message: 'Некорректный email' })
-  @IsNotEmpty({ message: 'Почта адресата не может быть пустой' })
+  @IsOptional()
   receiver_email: string;
   @IsNotEmpty({ message: 'Адрес адресата не может быть пустым' })
   receiver_address: string;
