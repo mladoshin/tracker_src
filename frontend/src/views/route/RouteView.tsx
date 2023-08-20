@@ -60,6 +60,21 @@ function RouteView() {
     }
   }
 
+  async function onSubmit(values: RouteForm) {
+    try {
+      if (routeId === 'new') {
+        //create new package
+        await createRoute(values.route).unwrap();
+        navigate('/panel/routes');
+      } else {
+        await updateRoute({ id: routeId as string, data: values.route }).unwrap();
+        navigate('/panel/routes');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-row justify-between">
@@ -68,19 +83,7 @@ function RouteView() {
       <Formik
         innerRef={formikRef}
         initialValues={initValues}
-        onSubmit={(
-          values: RouteForm,
-          { setSubmitting }: FormikHelpers<RouteForm>,
-        ) => {
-          if (routeId === 'new') {
-            //create new package
-            createRoute(values.route);
-            navigate('/panel/routes');
-          } else {
-            updateRoute({ id: routeId as string, data: values.route });
-            navigate('/panel/routes');
-          }
-        }}>
+        onSubmit={(values: RouteForm) => onSubmit(values)}>
         {(props) => (
           <form onSubmit={props.handleSubmit}>
             <div className="w-96 mb-7">

@@ -1,4 +1,4 @@
-import { Avatar, Dropdown, Navbar } from 'flowbite-react';
+import { Navbar } from 'flowbite-react';
 
 export default function TopNavbar() {
   return (
@@ -8,7 +8,7 @@ export default function TopNavbar() {
           Админ панель
         </span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      {/* <div className="flex md:order-2">
         <Dropdown
           inline
           label={
@@ -31,7 +31,7 @@ export default function TopNavbar() {
           <Dropdown.Item>Выйти</Dropdown.Item>
         </Dropdown>
         <Navbar.Toggle />
-      </div>
+      </div> */}
       <Navbar.Collapse>
         
       </Navbar.Collapse>

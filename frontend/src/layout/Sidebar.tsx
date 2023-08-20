@@ -11,9 +11,26 @@ import {
   HiViewBoards,
 } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
+import { useLogoutMutation } from '../api/api_index';
+import { useTypedDispatch } from '../redux/hooks';
+import { logout } from '../redux/auth/slice';
 
 export default function AppSidebar() {
   const navigate = useNavigate();
+  const [triggerLogout] = useLogoutMutation();
+  const dispatch = useTypedDispatch();
+
+  async function handleLogout() {
+    try {
+      await triggerLogout().unwrap();
+      dispatch(logout());
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+      navigate('/signin');
+    }
+  }
+
   return (
     <Sidebar
       aria-label="Sidebar with content separator example"
@@ -37,7 +54,7 @@ export default function AppSidebar() {
           </Sidebar.Item>
         </Sidebar.ItemGroup>
         <Sidebar.ItemGroup>
-          <Sidebar.Item href="#" icon={HiUser}>
+          <Sidebar.Item href="#" icon={HiUser} onClick={handleLogout}>
             <p>Выйти</p>
           </Sidebar.Item>
         </Sidebar.ItemGroup>
