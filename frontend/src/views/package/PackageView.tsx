@@ -96,10 +96,10 @@ function PackageView() {
       if (packageId === 'new') {
         //create new package
 
-        await createPackage(body);
+        await createPackage(body).unwrap();
         navigate('/panel/packages');
       } else {
-        await updatePackage({ id: packageId as string, data: body });
+        await updatePackage({ id: packageId as string, data: body }).unwrap();
         navigate('/panel/packages');
       }
     } catch (e) {
