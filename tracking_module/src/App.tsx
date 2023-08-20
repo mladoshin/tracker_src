@@ -22,10 +22,13 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit() {
+    if (!trackNumber.length) {
+      return setError("Tracking number can't be empty!");
+    }
     try {
       setLoading(true);
       setPackage({} as GetPublicPackageDto);
-      const res = await getPackageInfo(trackNumber);
+      const res = await getPackageInfo(trackNumber.toUpperCase());
       setPackage(res.data);
       setLoading(false);
       setError("");
@@ -56,24 +59,32 @@ function App() {
         <TextInput
           type="text"
           value={trackNumber}
-          onChange={(e) => setTrackNumber(e.target.value)}
+          onChange={(e) => setTrackNumber(e.target.value.toUpperCase())}
+          placeholder="Enter tracking number"
         />
-        <Button onClick={handleSubmit} disabled={!trackNumber.length}>
+        <button
+          onClick={handleSubmit}
+          className="bg-green-500 hover:bg-green-400 rounded-md text-white px-6"
+        >
           Track
-        </Button>
+        </button>
       </div>
       {(() => {
         if (loading) {
-          return <Spinner aria-label="Extra large spinner example" size="xl" />;
+          return (
+            <Spinner
+              aria-label="Extra large spinner example"
+              size="xl"
+              color="success"
+            />
+          );
         }
 
         if (error) {
           return (
             <Alert color="failure">
               <span>
-                <p>
-                  {error}
-                </p>
+                <p>{error}</p>
               </span>
             </Alert>
           );
@@ -84,7 +95,7 @@ function App() {
         }
 
         return (
-          <Card>
+          <Card className="my-3">
             <h3 className="text-xl">Tracking number: {pack.tracking_id}</h3>
             <RouteTimeline steps={done_steps} />
             <PackageInfo pack={pack} />
@@ -102,7 +113,9 @@ function RouteTimeline({
 }) {
   return (
     <Timeline
-      theme={{ item: { point: { marker: { icon: { wrapper: "h-10 w-10" } } } } }}
+      theme={{
+        item: { point: { marker: { icon: { wrapper: "h-10 w-10" } } } },
+      }}
     >
       {steps.map((st) => (
         <Timeline.Item>

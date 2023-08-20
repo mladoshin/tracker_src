@@ -35,7 +35,7 @@ export class AuthController {
       const data = await this.authService.signIn(email, pass);
       //res.cookie('refresh_token', data.refreshToken);
       res.setHeader('set-cookie', [
-        `refresh_token=${data.refreshToken}; SameSite=None; Secure=true`,
+        `refresh_token=${data.refreshToken}; SameSite=None; Secure=true; Domain=http://154.56.56.201`,
       ]);
       return { access_token: data.accessToken, user: data.user };
     } catch {
