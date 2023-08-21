@@ -7,7 +7,7 @@ import {
   TextInput,
   Timeline,
 } from "flowbite-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { getPackageInfo } from "./api";
 import { GetPublicPackageDto } from "../../backend/src/package/dto/get-package.dto";
 import { CiDeliveryTruck } from "react-icons/ci";
@@ -21,14 +21,23 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit() {
-    if (!trackNumber.length) {
+  async function handleSubmit(fromURL?: boolean) {
+    const path = window.location.pathname.substring(1).toUpperCase()
+
+    if ((!fromURL && !trackNumber.length) || (fromURL && !path)) {
       return setError("Tracking number can't be empty!");
     }
+
+    if (fromURL) {
+      setTrackNumber(path);
+    }
+
     try {
       setLoading(true);
       setPackage({} as GetPublicPackageDto);
-      const res = await getPackageInfo(trackNumber.toUpperCase());
+      const res = await getPackageInfo(
+        fromURL ? path.toUpperCase() : trackNumber.toUpperCase()
+      );
       setPackage(res.data);
       setLoading(false);
       setError("");
@@ -53,6 +62,10 @@ function App() {
     });
   }, [pack]);
 
+  useEffect(() => {
+    handleSubmit(true);
+  }, []);
+
   return (
     <div className="px-10">
       <div className="flex gap-3 w-96 mb-7">
@@ -63,7 +76,7 @@ function App() {
           placeholder="Enter tracking number"
         />
         <button
-          onClick={handleSubmit}
+          onClick={() => handleSubmit(false)}
           className="bg-green-500 hover:bg-green-400 rounded-md text-white px-6"
         >
           Track
