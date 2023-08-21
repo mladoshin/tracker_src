@@ -83,38 +83,40 @@ function PackageView() {
     } catch {}
   }
 
+  async function onSumbit(values: PackageType) {
+    try {
+      const body: CreatePackageBody = {
+        ...values,
+        start_date: new Date(values.start_date).toISOString(),
+        expected_delivery_date: new Date(
+          values.expected_delivery_date,
+        ).toISOString(),
+      };
+
+      if (packageId === 'new') {
+        //create new package
+
+        await createPackage(body).unwrap();
+        navigate('/panel/packages');
+      } else {
+        await updatePackage({ id: packageId as string, data: body }).unwrap();
+        navigate('/panel/packages');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       <div className="flex flex-row justify-between">
-        <h2 className="font-bold text-3xl">
-          Посылка {data?.name}
-        </h2>
+        <h2 className="font-bold text-3xl">Посылка {data?.name}</h2>
         <p>Трек номер: {data?.tracking_id}</p>
       </div>
       <Formik
         innerRef={formikRef}
         initialValues={initValues}
-        onSubmit={(
-          values: PackageType,
-          { setSubmitting }: FormikHelpers<PackageType>,
-        ) => {
-          const body: CreatePackageBody = {
-            ...values,
-            start_date: new Date(values.start_date).toISOString(),
-            expected_delivery_date: new Date(
-              values.expected_delivery_date,
-            ).toISOString(),
-          };
-
-          if (packageId === 'new') {
-            //create new package
-
-            createPackage(body);
-            navigate('/panel/packages');
-          } else {
-            updatePackage({ id: packageId as string, data: body });
-          }
-        }}>
+        onSubmit={(values: PackageType) => onSumbit(values)}>
         {(props) => (
           <form onSubmit={props.handleSubmit}>
             <div className="w-96 mx-auto">
