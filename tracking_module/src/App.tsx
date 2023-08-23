@@ -22,9 +22,9 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(fromURL?: boolean) {
-    const path = window.location.pathname.substring(1).toUpperCase()
-
-    if ((!fromURL && !trackNumber.length) || (fromURL && !path)) {
+    const path = window.location.pathname.replace("/", "").toUpperCase()
+    if(!path && fromURL) return;
+    if ((!fromURL && !trackNumber.length)) {
       return setError("Tracking number can't be empty!");
     }
 
