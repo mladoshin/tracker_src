@@ -35,7 +35,7 @@ export class AuthController {
       const data = await this.authService.signIn(email, pass);
       //res.cookie('refresh_token', data.refreshToken);
       res.setHeader('set-cookie', [
-        `refresh_token=${data.refreshToken}; HttpOnly; Domain=154.56.56.201; Path=/`,
+        `refresh_token=${data.refreshToken}; Domain=ynom.net; Path=/`,
       ]);
       return { access_token: data.accessToken, user: data.user };
     } catch {
@@ -82,7 +82,7 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     res.setHeader('set-cookie', [
-      `refresh_token=${data.refreshToken}; SameSite=None; Secure=true`,
+      `refresh_token=${data.refreshToken}; Domain=ynom.net; Path=/`,
     ]);
     return { access_token: data.accessToken, hi: 1 };
   }
