@@ -2,11 +2,9 @@
 import './App.css';
 import {
   BrowserRouter,
-  Outlet,
   Route,
-  RouterProvider,
   Routes,
-  createBrowserRouter,
+  useNavigate,
 } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { Provider } from 'react-redux';
@@ -20,15 +18,19 @@ import ListRoutesView from './views/route/ListRoutesView';
 import RouteView from './views/route/RouteView';
 import ListPackagesView from './views/package/ListPackagesView';
 import PackageView from './views/package/PackageView';
+import NoMatch from './views/404/NoMatch';
+import { useEffect } from 'react';
 
 const hash = '818ac5cb';
+
 function App() {
   return (
     <Provider store={store}>
       <ToastContainer />
       <BrowserRouter basename={`admin${hash}`}>
         <Routes>
-          <Route path="/" element={<h1>Main page</h1>} />
+          {/* Redirect */}
+          <Route path="/" element={<Redirect to="panel"/>}/>
           <Route path="signin" element={<SignInView />} />
           <Route path="panel" element={<ProtectedRoute />}>
             <Route path="" element={<Layout />}>
@@ -40,10 +42,22 @@ function App() {
               <Route path="packages/:packageId" element={<PackageView />} />
             </Route>
           </Route>
+          
+          <Route path="*" element={<NoMatch />} />
         </Routes>
       </BrowserRouter>
       {/* <RouterProvider router={router} /> */}
     </Provider>
   );
 }
+
+function Redirect({ to }: { to: string }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(to);
+  }, []);
+
+  return null;
+}
+export { hash };
 export default App;

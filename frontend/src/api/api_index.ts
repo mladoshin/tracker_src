@@ -7,12 +7,12 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../redux/store';
 import { Admin } from '../../../backend/node_modules/@prisma/client';
-import { PackageType } from '../components/package/PackagesTable';
 import { logout } from '../redux/auth/slice';
 import { GetRouteDto } from '../../../backend/src/route/dto/get-route.dto';
 import { CreatePackageDto } from '../../../backend/src/package/dto/create-package.dto';
 import { CreateRouteDto } from '../../../backend/src/route/dto/create-route.dto';
 import { GetPackageDto } from '../../../backend/src/package/dto/get-package.dto';
+import { hash } from '../App';
 
 // export type TSite = components['schemas']['Site'];
 // export type TClient = components['schemas']['Client'];
@@ -74,7 +74,7 @@ const baseQueryWithReauth: BaseQueryFn<
   if (result.error && result.error.status === 401) {
     if ((args as any).url === 'auth/refresh') {
       api.dispatch(logout());
-      window.location.href = `${window.location.origin}/admin/signin`;
+      window.location.href = `${window.location.origin}/admin${hash}/signin`;
       return result;
     }
     // try to get a new token
@@ -89,7 +89,7 @@ const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(logout());
-      window.location.href = `${window.location.origin}/admin/signin`;
+      window.location.href = `${window.location.origin}/admin${hash}/signin`;
     }
   }
   return result;
