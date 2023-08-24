@@ -172,7 +172,7 @@ function PackageView() {
               </div>
               <TextInput
                 id="weight"
-                type="text"
+                type="number"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
                 value={props.values.weight}
