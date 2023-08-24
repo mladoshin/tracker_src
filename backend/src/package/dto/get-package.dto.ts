@@ -43,7 +43,7 @@ export class GetPublicPackageDto {
   receiver_phone: string;
   @Exclude()
   receiver_email: string;
-  @Exclude()
+  //@Exclude()
   receiver_address: string;
   start_address: string;
   start_date: Date;
