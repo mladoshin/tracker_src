@@ -19,6 +19,6 @@ async function bootstrap() {
     dest: './upload',
   });
 
-  await app.listen(3000, '127.0.0.1');
+  await app.listen(process.env.BACKEND_PORT, '127.0.0.1');
 }
 bootstrap();
