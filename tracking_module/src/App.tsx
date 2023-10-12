@@ -22,9 +22,9 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(fromURL?: boolean) {
-    const path = window.location.pathname.replace("/track/", "").toUpperCase()
-    if(!path && fromURL) return;
-    if ((!fromURL && !trackNumber.length)) {
+    const path = window.location.pathname.replace("/track/", "").toUpperCase();
+    if (!path && fromURL) return;
+    if (!fromURL && !trackNumber.length) {
       return setError("Tracking number can't be empty!");
     }
 
@@ -67,7 +67,7 @@ function App() {
   }, []);
 
   return (
-    <div className="px-10">
+    <div className="sm:px-1 md:px-10">
       <div className="flex gap-3 w-96 mb-7">
         <TextInput
           type="text"
@@ -108,7 +108,12 @@ function App() {
         }
 
         return (
-          <Card className="my-3">
+          <Card
+            className="my-3"
+            theme={{
+              root: { children: "flex flex-col gap-2 md:gap-4 p-2 md:p-6" },
+            }}
+          >
             <h3 className="text-xl">Tracking number: {pack.tracking_id}</h3>
             <RouteTimeline steps={done_steps} />
             <PackageInfo pack={pack} />
@@ -174,12 +179,12 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
   ];
 
   return (
-    <div>
+    <>
       <h3 className="text-xl my-4">Shipper information</h3>
       <Table className="border-collapse border table-fixed mb-16">
         <Table.Body className="divide-x divide-y ">
           <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
+            <Table.Cell className="md:whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
               Address
             </Table.Cell>
             <Table.Cell className="border border-gray-300 w-1/2">
@@ -194,7 +199,7 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
         <Table.Body className="divide-x divide-y ">
           {receiver_info.map((info) => (
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
+              <Table.Cell className="md:whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
                 {info.title}
               </Table.Cell>
               <Table.Cell className="border border-gray-300 w-1/2">
@@ -210,7 +215,7 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
         <Table.Body className="divide-x divide-y ">
           {shipment_info.map((info) => (
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
+              <Table.Cell className="md:whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
                 {info.title}
               </Table.Cell>
               <Table.Cell className="border border-gray-300 w-1/2">
@@ -220,7 +225,7 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
           ))}
         </Table.Body>
       </Table>
-    </div>
+    </>
   );
 }
 
