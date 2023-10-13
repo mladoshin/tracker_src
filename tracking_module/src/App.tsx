@@ -20,24 +20,24 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(fromURL?: boolean) {
-    const path = window.location.pathname
-      .replace("/track/", "")
-      .replace("/", "")
-      .toUpperCase();
-    if (!path && fromURL) return;
+    const idx = window.location.pathname.indexOf("track/");
+    const trackNumberFromUrl =
+      idx !== -1 ? window.location.pathname.slice(idx + 6).toUpperCase() : null;
+    if (!trackNumberFromUrl && fromURL) return;
+
     if (!fromURL && !trackNumber.length) {
       return setError("Tracking number can't be empty!");
     }
 
-    if (fromURL) {
-      setTrackNumber(path);
+    if (trackNumberFromUrl && fromURL) {
+      setTrackNumber(trackNumberFromUrl);
     }
 
     try {
       setLoading(true);
       setPackage({} as GetPublicPackageDto);
       const res = await getPackageInfo(
-        fromURL ? path.toUpperCase() : trackNumber.toUpperCase()
+        fromURL ? (trackNumberFromUrl as string) : trackNumber.toUpperCase()
       );
       setPackage(res.data);
       setLoading(false);
