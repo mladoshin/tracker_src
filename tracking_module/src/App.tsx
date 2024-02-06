@@ -20,9 +20,14 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(fromURL?: boolean) {
+    console.log(window.location.pathname);
     const idx = window.location.pathname.indexOf("track/");
+    console.log("idx = ", idx);
+
     const trackNumberFromUrl =
       idx !== -1 ? window.location.pathname.slice(idx + 6).toUpperCase() : null;
+
+    console.log("trackNumberFromUrl = ", trackNumberFromUrl);
     if (!trackNumberFromUrl && fromURL) return;
 
     if (!fromURL && !trackNumber.length) {
