@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   Card,
   Spinner,
   Table,
@@ -11,7 +10,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { getPackageInfo } from "./api";
 import { GetPublicPackageDto } from "../../backend/src/package/dto/get-package.dto";
 import { CiDeliveryTruck } from "react-icons/ci";
-import { AxiosError } from "axios";
 
 function App() {
   const [trackNumber, setTrackNumber] = useState("");
@@ -22,21 +20,29 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(fromURL?: boolean) {
-    const path = window.location.pathname.replace("/track/", "").toUpperCase();
-    if (!path && fromURL) return;
+    console.log(window.location.pathname);
+    const idx = window.location.pathname.indexOf("track/");
+    console.log("idx = ", idx);
+
+    const trackNumberFromUrl =
+      idx !== -1 ? window.location.pathname.slice(idx + 6).toUpperCase() : null;
+
+    console.log("trackNumberFromUrl = ", trackNumberFromUrl);
+    if (!trackNumberFromUrl && fromURL) return;
+
     if (!fromURL && !trackNumber.length) {
       return setError("Tracking number can't be empty!");
     }
 
-    if (fromURL) {
-      setTrackNumber(path);
+    if (trackNumberFromUrl && fromURL) {
+      setTrackNumber(trackNumberFromUrl);
     }
 
     try {
       setLoading(true);
       setPackage({} as GetPublicPackageDto);
       const res = await getPackageInfo(
-        fromURL ? path.toUpperCase() : trackNumber.toUpperCase()
+        fromURL ? (trackNumberFromUrl as string) : trackNumber.toUpperCase()
       );
       setPackage(res.data);
       setLoading(false);
