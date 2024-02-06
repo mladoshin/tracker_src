@@ -82,7 +82,7 @@ export class AuthController {
       throw new UnauthorizedException();
     }
     res.setHeader('set-cookie', [
-      `refresh_token=${data.refreshToken}; Domain=ynom.net; Path=/`,
+      `refresh_token=${data.refreshToken}; SameSite=true; Path=/`,
     ]);
     return { access_token: data.accessToken, hi: 1 };
   }
