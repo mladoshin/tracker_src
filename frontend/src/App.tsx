@@ -21,7 +21,7 @@ import PackageView from './views/package/PackageView';
 import NoMatch from './views/404/NoMatch';
 import { useEffect } from 'react';
 
-const hash = '818ac5cb';
+const hash = '';
 
 function App() {
   return (

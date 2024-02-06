@@ -35,7 +35,7 @@ export class AuthController {
       const data = await this.authService.signIn(email, pass);
       //res.cookie('refresh_token', data.refreshToken);
       res.setHeader('set-cookie', [
-        `refresh_token=${data.refreshToken}; Domain=ynom.net; Path=/`,
+        `refresh_token=${data.refreshToken}; Domain=38.180.78.227; Path=/`,
       ]);
       return { access_token: data.accessToken, user: data.user };
     } catch {
