@@ -190,6 +190,14 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
         <Table.Body className="divide-x divide-y ">
           <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
             <Table.Cell className="md:whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
+              Name
+            </Table.Cell>
+            <Table.Cell className="border border-gray-300 w-1/2">
+              {pack.sender_name}
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            <Table.Cell className="md:whitespace-nowrap font-medium text-gray-900 dark:text-white border-gray-300 border w-1/2">
               Address
             </Table.Cell>
             <Table.Cell className="border border-gray-300 w-1/2">

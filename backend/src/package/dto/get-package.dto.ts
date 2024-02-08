@@ -39,6 +39,7 @@ export class GetPublicPackageDto {
   comment: string;
   shipment: string;
   receiver_name: string;
+  sender_name: string;
   @Exclude()
   receiver_phone: string;
   @Exclude()
