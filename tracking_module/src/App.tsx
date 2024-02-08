@@ -168,7 +168,6 @@ function PackageInfo({ pack }: { pack: GetPublicPackageDto }) {
     { title: "Payment mode", value: pack.payment_mode },
     { title: "Departure time", value: new Date(pack.start_date).toUTCString() },
     { title: "Destination", value: pack.destination },
-    { title: "Product", value: pack.name },
     {
       title: "Expected delivery date",
       value: new Date(pack.expected_delivery_date).toUTCString(),
