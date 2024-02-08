@@ -36,8 +36,9 @@ export class CreatePackageDto {
   @IsDateString({}, { message: 'Некорректная дата доставки' })
   expected_delivery_date: Date;
   
+  @IsOptional()
   @IsAlphanumeric()
-  comment: string;
+  comment?: string;
 
   @IsAlphanumeric()
   shipment: string;
@@ -53,7 +54,7 @@ export class CreatePackageDto {
 
   @IsOptional()
   @IsEmail()
-  receiver_email: string;
+  receiver_email?: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Адрес адресата не может быть пустым' })

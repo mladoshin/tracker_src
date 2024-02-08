@@ -13,9 +13,12 @@ export class PackageService {
     parcel_data: Exclude<CreatePackageDto, 'route'>,
     route_data: Route,
   ) {
+    const { receiver_email = '', comment = '', ...data } = parcel_data;
     return await this.prisma.package.create({
       data: {
-        ...parcel_data,
+        ...data,
+        receiver_email,
+        comment,
         tracking_id: genTrackingNumber(),
         route: {
           create: {
