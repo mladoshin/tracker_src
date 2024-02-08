@@ -42,7 +42,6 @@ export class CreatePackageDto {
   shipment: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Имя адресата не может быть пустым' })
   receiver_name: string;
 
   @IsOptional()
