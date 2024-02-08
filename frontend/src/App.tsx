@@ -32,6 +32,7 @@ function App() {
           {/* Redirect */}
           <Route path="/" element={<Redirect to="panel"/>}/>
           <Route path="signin" element={<SignInView />} />
+          <Route path="packages/:packageId" element={<PackageView />} />
           <Route path="panel" element={<ProtectedRoute />}>
             <Route path="" element={<Layout />}>
               <Route path="account" element={<Account />} />

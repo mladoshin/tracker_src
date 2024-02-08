@@ -9,7 +9,7 @@ import {
   useUpdatePackageMutation,
 } from '../../api/api_index';
 import { Formik, FormikHelpers } from 'formik';
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Button, Label, TextInput, Datepicker } from 'flowbite-react';
 import RouteForm from '../../components/package/RouteForm';
 import { PackageType } from '../../components/package/PackagesTable';
 import moment from 'moment';
@@ -211,9 +211,7 @@ function PackageView() {
                 type="date"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
-                value={moment(new Date(props.values.start_date)).format(
-                  'YYYY-MM-DD',
-                )}
+                value={moment(props.values.start_date).format('YYYY-MM-DD')}
                 name="start_date"
               />
 
@@ -252,9 +250,9 @@ function PackageView() {
                 type="date"
                 onChange={props.handleChange}
                 onBlur={props.handleBlur}
-                value={moment(
-                  new Date(props.values.expected_delivery_date),
-                ).format('YYYY-MM-DD')}
+                value={moment(props.values.expected_delivery_date).format(
+                  'YYYY-MM-DD',
+                )}
                 name="expected_delivery_date"
               />
 
