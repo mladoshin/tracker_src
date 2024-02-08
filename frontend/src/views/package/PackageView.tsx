@@ -35,6 +35,7 @@ const initValues: PackageType = {
   start_date: new Date(),
   status: '',
   weight: 10,
+  sender_name: '',
 };
 
 function PackageView() {
@@ -165,6 +166,18 @@ function PackageView() {
                 onBlur={props.handleBlur}
                 value={props.values.mode}
                 name="mode"
+              />
+
+              <div className="mb-2 block">
+                <Label htmlFor="mode" value="Имя отправителя" />
+              </div>
+              <TextInput
+                id="sender_name"
+                type="text"
+                onChange={props.handleChange}
+                onBlur={props.handleBlur}
+                value={props.values.sender_name}
+                name="sender_name"
               />
 
               <div className="mb-2 block">

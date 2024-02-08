@@ -1,46 +1,44 @@
 import { Exclude } from 'class-transformer';
 import {
-  IsEmail,
-  IsNotEmpty,
-  MinLength,
-  MaxLength,
-  IsNumber,
-  IsDateString,
-  Min,
-  IsArray,
   ArrayNotEmpty,
-  IsAlphanumeric,
+  IsArray,
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
+  Min,
 } from 'class-validator';
 export class CreatePackageDto {
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'Имя не может быть пустым' })
   name: string;
 
-  @IsNotEmpty({ message: 'Вес не может быть пустым' })
   @IsNumber({ allowInfinity: false }, { message: 'Вес должен быть числом' })
   weight: number;
+
+  @IsString()
+  sender_name: string;
 
   mode: string;
   payment_mode: string;
   carrier: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'Адрес не может быть пустым' })
   destination: string;
 
   status: string;
 
-
   @IsDateString({}, { message: 'Некорректная дата доставки' })
   expected_delivery_date: Date;
-  
+
   @IsOptional()
-  @IsAlphanumeric()
+  @IsString()
   comment?: string;
 
-  @IsAlphanumeric()
+  @IsOptional()
+  @IsString()
   shipment: string;
 
   @IsString()
@@ -49,25 +47,27 @@ export class CreatePackageDto {
 
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
   receiver_phone: string;
 
   @IsOptional()
-  @IsEmail()
+  @IsString()
+  //@IsEmail()
   receiver_email?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'Адрес адресата не может быть пустым' })
+  //@IsNotEmpty({ message: 'Адрес адресата не может быть пустым' })
   receiver_address: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'Начальный адрес не может быть пустым' })
+  //@IsNotEmpty({ message: 'Начальный адрес не может быть пустым' })
   start_address: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'Начальная дата не может быть пустой' })
   start_date: Date;
-  
+
   route: Route;
 }
 
